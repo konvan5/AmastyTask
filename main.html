@@ -185,8 +185,6 @@
         }
       });
 
-      
-
       $("#typeSelect").change(function(){
         $("#typeInput").val($("#typeSelect").val());
         updatePriceLables();
@@ -199,7 +197,29 @@
         $("#sauceInput").val($("#sauceSelect").val());
       });
 
+      $("#dialog").dialog({
+      autoOpen: false,
+      show: {
+        effect: "blind",
+        duration: 1000
+      },
+      hide: {
+        effect: "explode",
+        duration: 1000
+      }
     });
+
+      $("#orderButton").click(function(){
+        $("#typeP").text("Тип пиццы: " + $("#typeSelect").val() + ".");
+        $("#sizeP").text("Размер: " + $("#sizeSelect").val() + " см.");
+        $("#souceP").text("Соус: " + $("#sauceSelect").val() + ".");
+        $("#totalPriceP").text("Итоговая цена: " + (priceFactors[$("#sizeSelect").prop('selectedIndex')] * prices[$("#typeSelect").prop('selectedIndex')]) + " руб.");
+        $("#dialog").dialog("open");
+      });
+
+    });
+
+
   </script>
 </head>
 
@@ -224,5 +244,29 @@
   </div>
   <button id="orderButton">Заказать</button>
   <label id="totalPrice"></label>
+  <div id="dialog" title="Чек" style="cursor: auto;
+  z-index: 100;
+  padding: .2em;
+  outline: 0;
+  font-family: Arial,Helvetica,sans-serif;
+  font-size: 1em;
+  background: #ffffff;
+  color: #333333;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+  background-position: top;
+  border: 1px solid #c5c5c5;
+  position: absolute;
+  height: 154.6px;
+  width: 300px;
+  top: 25px;
+  display: block;">
+    <p id="typeP">Тип пиццы: </p>
+    <p id="sizeP">Размер: </p>
+    <p id="souceP">Соус: </p>
+    <p id="totalPriceP">Итоговая цена:  </p>
+  </div>
 </body>
 </html>
