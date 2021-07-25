@@ -18,6 +18,13 @@
   * html .ui-autocomplete {
     height: 100px;
   }
+  .mytext {
+    font-family: Arial,Helvetica,sans-serif; 
+    font-size: 1.2em;
+  }
+  .ui-dialog-titlebar-close {
+    margin-left: 60%;
+  }
   </style>
 
   <script>
@@ -80,7 +87,7 @@
       if($("#sauceInput").val() === ""){
         $("#sauceInput").val($("#sauceSelect").val());
       }
-      $('#orderButton').prop('disabled', false);
+      $('#orderButton').button({disabled:false});
     }
 
     function typeChanged() {
@@ -160,12 +167,13 @@
     } );
 
     $(document).ready(function(){
+      $('#orderButton').button({disabled:true});
       $('#typeSelect option').prop('selected', false);
       $('#sizeSelect').prop('disabled', true);
       $('#sizeInput').prop('disabled', true);
       $('#sauceSelect').prop('disabled', true);
       $('#sauceInput').prop('disabled', true);
-      $('#orderButton').prop('disabled', true);
+      
 
       $("#typeSelect").click(function(){
         if($("#typeSelect option").size() === 0) {
@@ -209,7 +217,7 @@
       }
     });
 
-      $("#orderButton").click(function(){
+      $("#orderButton").button().click(function(){
         $("#typeP").text("Тип пиццы: " + $("#typeSelect").val() + ".");
         $("#sizeP").text("Размер: " + $("#sizeSelect").val() + " см.");
         $("#souceP").text("Соус: " + $("#sauceSelect").val() + ".");
@@ -223,46 +231,39 @@
   </script>
 </head>
 
-<body>
-  <h2>Моя пицца!</h2>
-  <div class="ui-widget">
-    <label for="typeSelect">Тип пиццы: </label>
-    <select id="typeSelect" style="min-width: 100px;"></select>
-    <input id="typeInput">
-    <label id="priceLabel"></label>
+<body class="mytext">
+  <div>
+    <h2>Моя пицца!</h2>
+    <div class="ui-widget">
+      <label for="typeSelect">Тип пиццы: </label>
+      <select id="typeSelect" class="mytext" style="min-width: 100px;"></select>
+      <input id="typeInput" class="mytext">
+      <label id="priceLabel"></label>
+    </div>
+    <div class="ui-widget">
+      <label for="sizeSelect">Размер, см: </label>
+      <select id="sizeSelect" class="mytext" style="min-width: 100px;"></select>
+      <input id="sizeInput" class="mytext">
+      <label id="priceFactorLabel"></label>
+    </div>
+    <div class="ui-widget">
+      <label for="sauceSelect">Тип соуса: </label>
+      <select id="sauceSelect" class="mytext" style="min-width: 100px;"></select>
+      <input id="sauceInput" class="mytext">
+    </div>
+    <button id="orderButton" class="mytext">Заказать</button>
+    <label id="totalPrice"></label>
   </div>
-  <div class="ui-widget">
-    <label for="sizeSelect">Размер, см: </label>
-    <select id="sizeSelect" style="min-width: 100px;"></select>
-    <input id="sizeInput">
-    <label id="priceFactorLabel"></label>
-  </div>
-  <div class="ui-widget">
-    <label for="sauceSelect">Тип соуса: </label>
-    <select id="sauceSelect" style="min-width: 100px;"></select>
-    <input id="sauceInput">
-  </div>
-  <button id="orderButton">Заказать</button>
-  <label id="totalPrice"></label>
-  <div id="dialog" title="Чек" style="cursor: auto;
-  z-index: 100;
-  padding: .2em;
-  outline: 0;
-  font-family: Arial,Helvetica,sans-serif;
-  font-size: 1em;
-  background: #ffffff;
-  color: #333333;
-  border-top-left-radius: 3px;
-  border-top-right-radius: 3px;
-  border-bottom-left-radius: 3px;
-  border-bottom-right-radius: 3px;
-  background-position: top;
-  border: 1px solid #c5c5c5;
-  position: absolute;
-  height: 154.6px;
-  width: 300px;
-  top: 25px;
-  display: block;">
+  <div id="dialog" title="Чек" class="mytext" style="
+    padding: .2em;
+    outline: 0;
+    background-position: top;
+    border: 1px solid #c5c5c5;
+    position: absolute;
+    height: 154.6px;
+    width: 300px;
+    top: 25px;
+    display: block;">
     <p id="typeP">Тип пиццы: </p>
     <p id="sizeP">Размер: </p>
     <p id="souceP">Соус: </p>
