@@ -1,0 +1,228 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Моя пицца!</title>
+  <script src="./node_modules/jquery/dist/jquery.js"></script>
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+  <style>
+    .ui-autocomplete {
+    max-height: 100px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  * html .ui-autocomplete {
+    height: 100px;
+  }
+  </style>
+
+  <script>
+    var typeTags = [
+        "Пепперони",
+        "Деревенская",
+        "Гавайская",
+        "Грибная"
+      ],
+        sizeTags = [
+        "21",
+        "26",
+        "31",
+        "45"
+      ],
+        sauceTags = [
+        "Сырный",
+        "Кисло-сладкий",
+        "Чесночный",
+        "Барбекю"
+      ],
+        prices = [
+        10,
+        14,
+        13,
+        8
+      ],
+        priceFactors = [
+        1,
+        1.5,
+        2,
+        3
+      ];
+    function typeInit() {
+      for (let i = 0; i < typeTags.length; i++) {
+        $("#typeSelect").append('<option value="' + typeTags[i] + '">' + typeTags[i] + '</option>');
+      };
+      if($("#typeInput").val() === ""){
+        $("#typeInput").val($("#typeSelect").val());
+      }
+      $('#sizeSelect').prop('disabled', false);
+      $('#sizeInput').prop('disabled', false);
+    }
+
+    function sizeInit() {
+      for (let i = 0; i < sizeTags.length; i++) {
+        $("#sizeSelect").append('<option value="' + sizeTags[i] + '">' + sizeTags[i] + '</option>');
+      };
+      if($("#sizeInput").val() === ""){
+        $("#sizeInput").val($("#sizeSelect").val());
+      }
+      $('#sauceSelect').prop('disabled', false);
+      $('#sauceInput').prop('disabled', false);
+    }
+
+    function souceInit() {
+      for (let i = 0; i < sauceTags.length; i++) {
+        $("#sauceSelect").append('<option value="' + sauceTags[i] + '">' + sauceTags[i] + '</option>');
+      };
+      if($("#sauceInput").val() === ""){
+        $("#sauceInput").val($("#sauceSelect").val());
+      }
+      $('#orderButton').prop('disabled', false);
+    }
+
+    function typeChanged() {
+      if(jQuery.inArray( $("#typeInput").val(), typeTags) != -1){
+        if($("#typeSelect option").size() === 0) {
+          typeInit();
+        }
+        $('#typeSelect option:contains("' + $("#typeInput").val() + '")').prop('selected', true);
+        updatePriceLables();
+      }
+    }
+
+    function sizeChanged() {
+      if(jQuery.inArray( $("#sizeInput").val(), sizeTags) != -1){
+        if($("#sizeSelect option").size() === 0) {
+          sizeInit();
+        }
+        $('#sizeSelect option:contains("' + $("#sizeInput").val() + '")').prop('selected', true);
+        updatePriceLables();
+      }
+    }
+
+    function souceChanged() {
+      if(jQuery.inArray( $("#sauceInput").val(), sauceTags) != -1){
+        if($("#sauceSelect option").size() === 0) {
+          souceInit();
+        }
+        $('#sauceSelect option:contains("' + $("#sauceInput").val() + '")').prop('selected', true);
+      }
+    }
+
+    function updatePriceLables(){
+      $("#priceLabel").text("Цена: " + prices[$("#typeSelect").prop('selectedIndex')] + " руб.");
+      if(!$('#sauceSelect').prop('disabled')){
+        $("#priceFactorLabel").text("Множитель: " + priceFactors[$("#sizeSelect").prop('selectedIndex')]);
+        $("#totalPrice").text("Итоговая цена: " + (priceFactors[$("#sizeSelect").prop('selectedIndex')] * prices[$("#typeSelect").prop('selectedIndex')]) + " руб.");
+      }
+    }
+
+    $( function() { 
+      $( "#typeInput" ).autocomplete({
+        source: typeTags,
+        minLength: 0
+      }).keyup(function (e) {
+        if(e.which === 13) {
+            $(".ui-menu-item").hide();
+            typeChanged();
+        }            
+      }).change(
+        function () {
+            typeChanged();         
+      });
+
+      $( "#sizeInput" ).autocomplete({
+        source: sizeTags,
+        minLength: 0
+      }).keyup(function (e) {
+        if(e.which === 13) {
+            $(".ui-menu-item").hide();
+        }            
+      }).change(
+        function () {
+          sizeChanged();           
+      });
+
+      $( "#sauceInput" ).autocomplete({
+        source: sauceTags,
+        minLength: 0
+      }).keyup(function (e) {
+        if(e.which === 13) {
+            $(".ui-menu-item").hide();
+        }            
+      }).change(
+        function () {
+          souceChanged();           
+      });
+    } );
+
+    $(document).ready(function(){
+      $('#typeSelect option').prop('selected', false);
+      $('#sizeSelect').prop('disabled', true);
+      $('#sizeInput').prop('disabled', true);
+      $('#sauceSelect').prop('disabled', true);
+      $('#sauceInput').prop('disabled', true);
+      $('#orderButton').prop('disabled', true);
+
+      $("#typeSelect").click(function(){
+        if($("#typeSelect option").size() === 0) {
+          typeInit();
+          updatePriceLables();
+        }
+      });
+      $("#sizeSelect").click(function(){
+        if($("#sizeSelect option").size() === 0) {
+          sizeInit();
+          updatePriceLables();
+        }
+      });
+      $("#sauceSelect").click(function(){
+        if($("#sauceSelect option").size() === 0) {
+          souceInit();
+        }
+      });
+
+      
+
+      $("#typeSelect").change(function(){
+        $("#typeInput").val($("#typeSelect").val());
+        updatePriceLables();
+      });
+      $("#sizeSelect").change(function(){
+        $("#sizeInput").val($("#sizeSelect").val());
+        updatePriceLables();
+      });
+      $("#sauceSelect").change(function(){
+        $("#sauceInput").val($("#sauceSelect").val());
+      });
+
+    });
+  </script>
+</head>
+
+<body>
+  <h2>Моя пицца!</h2>
+  <div class="ui-widget">
+    <label for="typeSelect">Тип пиццы: </label>
+    <select id="typeSelect" style="min-width: 100px;"></select>
+    <input id="typeInput">
+    <label id="priceLabel"></label>
+  </div>
+  <div class="ui-widget">
+    <label for="sizeSelect">Размер, см: </label>
+    <select id="sizeSelect" style="min-width: 100px;"></select>
+    <input id="sizeInput">
+    <label id="priceFactorLabel"></label>
+  </div>
+  <div class="ui-widget">
+    <label for="sauceSelect">Тип соуса: </label>
+    <select id="sauceSelect" style="min-width: 100px;"></select>
+    <input id="sauceInput">
+  </div>
+  <button id="orderButton">Заказать</button>
+  <label id="totalPrice"></label>
+</body>
+</html>
